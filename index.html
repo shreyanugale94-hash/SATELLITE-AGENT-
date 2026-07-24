@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Satellite Communication Knowledge Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Starfield + Particle canvases — rendered behind everything -->
+<canvas id="starfield"></canvas>
+<canvas id="particles"></canvas>
+
+<div id="app">
+
+  <!-- ══════════ NAV ══════════ -->
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-logo-wrap">
+        <div class="nav-logo-ring"></div>
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+          <circle cx="19" cy="19" r="17" stroke="#3b82d4" stroke-width="1.5"/>
+          <ellipse cx="19" cy="19" rx="8" ry="17" stroke="#3b82d4" stroke-width="1" stroke-dasharray="3 2"/>
+          <circle cx="19" cy="19" r="4" fill="#3b82d4"/>
+          <line x1="2" y1="19" x2="36" y2="19" stroke="#3b82d4" stroke-width="0.7" stroke-dasharray="2 3"/>
+          <line x1="19" y1="2" x2="19" y2="36" stroke="#3b82d4" stroke-width="0.7" stroke-dasharray="2 3"/>
+          <circle cx="29" cy="9" r="2.5" fill="#60a5f5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="nav-title">Satellite Communication Assistant</div>
+        <div class="nav-sub">Powered by IBM watsonx Orchestrate</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-status"><span class="pulse-dot"></span>System Online</div>
+      <div class="nav-badge">AI Agent · Live</div>
+    </div>
+  </nav>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero">
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring"></div>
+    <div class="satellite-dot"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <circle cx="5" cy="5" r="4" stroke="#60a5f5" stroke-width="1.2"/>
+          <circle cx="5" cy="5" r="1.5" fill="#60a5f5"/>
+        </svg>
+        watsonx Orchestrate · Satellite Domain
+      </div>
+      <h1>
+        Smart<br/>
+        <span class="accent">Satellite Communication</span><br/>
+        Knowledge Assistant
+      </h1>
+      <p class="hero-desc">
+        Ask anything about
+        <span class="typed-text" id="typed-text">Orbital Mechanics</span><span class="typed-cursor"></span>
+        — powered by an advanced AI agent trained on the full spectrum of satellite engineering knowledge.
+      </p>
+      <div class="hero-cta">
+        <button class="btn-primary" id="btn-open-chat">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="3" width="14" height="10" rx="3" stroke="white" stroke-width="1.5"/>
+            <circle cx="5" cy="8" r="1.2" fill="white"/>
+            <circle cx="8" cy="8" r="1.2" fill="white"/>
+            <circle cx="11" cy="8" r="1.2" fill="white"/>
+          </svg>
+          Start Chatting Now
+        </button>
+        <button class="btn-ghost" id="btn-learn-more">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M8 5v4M8 11v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Explore Capabilities
+        </button>
+      </div>
+      <div class="chips">
+        <span class="chip">LEO / MEO / GEO Orbits</span>
+        <span class="chip">Link Budget Analysis</span>
+        <span class="chip">RF Frequency Bands</span>
+        <span class="chip">Signal Propagation</span>
+        <span class="chip">Ground Station Design</span>
+        <span class="chip">Space Protocols (CCSDS)</span>
+        <span class="chip">Antenna Engineering</span>
+        <span class="chip">Doppler Calculations</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ STATS BAR ══════════ -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-val" id="stat-articles">12K+</div>
+      <div class="stat-lbl">Knowledge Articles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val" id="stat-systems">340+</div>
+      <div class="stat-lbl">Satellite Systems</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val" id="stat-accuracy">98%</div>
+      <div class="stat-lbl">Response Accuracy</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val" id="stat-queries">50K+</div>
+      <div class="stat-lbl">Queries Answered</div>
+    </div>
+  </div>
+
+  <!-- ══════════ BODY LAYOUT ══════════ -->
+  <div class="layout">
+
+    <!-- ── SIDEBAR ── -->
+    <aside>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Knowledge Domains</div>
+        <ul class="topic-list">
+          <li><span class="topic-dot"></span><span class="label">Orbital Mechanics</span></li>
+          <li><span class="topic-dot green"></span><span class="label">RF &amp; Frequency Bands</span></li>
+          <li><span class="topic-dot purple"></span><span class="label">Link Budget &amp; EIRP</span></li>
+          <li><span class="topic-dot orange"></span><span class="label">Modulation Schemes</span></li>
+          <li><span class="topic-dot red"></span><span class="label">Antenna Systems</span></li>
+          <li><span class="topic-dot"></span><span class="label">Ground Station Ops</span></li>
+          <li><span class="topic-dot green"></span><span class="label">Space Protocols (CCSDS)</span></li>
+          <li><span class="topic-dot purple"></span><span class="label">Interference &amp; Noise</span></li>
+          <li><span class="topic-dot orange"></span><span class="label">Doppler &amp; Propagation</span></li>
+          <li><span class="topic-dot red"></span><span class="label">Launch &amp; Deployment</span></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Knowledge Base</div>
+        <div class="sidebar-stats">
+          <div class="ss-card"><div class="v">12K+</div><div class="l">Articles</div></div>
+          <div class="ss-card"><div class="v">340+</div><div class="l">Systems</div></div>
+          <div class="ss-card"><div class="v">98%</div><div class="l">Accuracy</div></div>
+          <div class="ss-card"><div class="v">24/7</div><div class="l">Available</div></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">System Status</div>
+        <div class="status-item"><span class="status-indicator"></span>watsonx Orchestrate</div>
+        <div class="status-item"><span class="status-indicator"></span>Knowledge Index Synced</div>
+        <div class="status-item"><span class="status-indicator"></span>Agent Model Ready</div>
+        <div class="status-item"><span class="status-indicator"></span>Satellite Data Feed</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Quick Tips</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.8;">
+          <div><kbd style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:10px;">Ctrl+K</kbd> Jump to Chat</div>
+          <div><kbd style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:10px;">Esc</kbd> Exit Fullscreen</div>
+          <div style="margin-top:6px;color:var(--muted);">Click any suggestion card to auto-load a question into the AI chat.</div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Live Clock</div>
+        <div id="clock-utc" style="font-size:12px;color:var(--accent2);font-variant-numeric:tabular-nums;margin-bottom:4px;">UTC --:--:--</div>
+        <div id="clock-loc" style="font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;">Local --:--:--</div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main>
+
+      <!-- Capability cards -->
+      <div class="section-label">What this assistant can do</div>
+      <div class="cap-cards" id="capabilities">
+        <div class="cap-card">
+          <div class="cap-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="14" stroke="#3b82d4" stroke-width="1.5"/>
+              <ellipse cx="16" cy="16" rx="6" ry="14" stroke="#3b82d4" stroke-width="1" stroke-dasharray="3 2"/>
+              <circle cx="16" cy="16" r="3.5" fill="#3b82d4"/>
+              <circle cx="24" cy="7" r="2" fill="#60a5f5"/>
+              <line x1="22.5" y1="8.5" x2="18" y2="14" stroke="#60a5f5" stroke-width="0.8" stroke-dasharray="2"/>
+            </svg>
+          </div>
+          <h3>Orbital Analysis</h3>
+          <p>Calculate orbital parameters, coverage footprints, revisit times, and pass predictions for LEO, MEO, and GEO satellites.</p>
+        </div>
+        <div class="cap-card">
+          <div class="cap-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="3" y="13" width="26" height="14" rx="3" stroke="#8b5cf6" stroke-width="1.5"/>
+              <path d="M16 13 L10 5 M16 13 L22 5" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M13 5 h6" stroke="#8b5cf6" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="16" cy="20" r="3" fill="#8b5cf6"/>
+            </svg>
+          </div>
+          <h3>Link Budget Tools</h3>
+          <p>Compute EIRP, free-space path loss, C/N ratios, Eb/N0, and system margin estimates across all frequency bands.</p>
+        </div>
+        <div class="cap-card">
+          <div class="cap-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M4 22 Q9 10 13 16 Q17 22 21 12 Q25 2 28 8" stroke="#22d87a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+              <circle cx="13" cy="16" r="2.5" fill="#22d87a"/>
+              <circle cx="21" cy="12" r="2" fill="#22d87a" opacity="0.7"/>
+            </svg>
+          </div>
+          <h3>Signal Propagation</h3>
+          <p>Model atmospheric attenuation, rain fade, ionospheric effects, and multipath interference for link planning.</p>
+        </div>
+        <div class="cap-card">
+          <div class="cap-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M6 26 L16 6 L26 26" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 20 h12" stroke="#f59e0b" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="16" cy="6" r="2" fill="#f59e0b"/>
+            </svg>
+          </div>
+          <h3>Antenna Design</h3>
+          <p>Evaluate parabolic, phased-array, and patch antenna designs. Calculate gain, beamwidth, and polarization.</p>
+        </div>
+        <div class="cap-card">
+          <div class="cap-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="4" y="16" width="24" height="12" rx="3" stroke="#60a5f5" stroke-width="1.5"/>
+              <rect x="10" y="8" width="12" height="10" rx="2" stroke="#60a5f5" stroke-width="1.2"/>
+              <circle cx="10" cy="8" r="2" fill="#60a5f5"/>
+              <circle cx="22" cy="8" r="2" fill="#60a5f5"/>
+              <line x1="16" y1="16" x2="16" y2="18" stroke="#60a5f5" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <h3>Ground Station Ops</h3>
+          <p>Guidance on tracking antennas, TT&amp;C systems, contact windows, handover procedures, and network architecture.</p>
+        </div>
+        <div class="cap-card">
+          <div class="cap-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="6" y="4" width="20" height="24" rx="3" stroke="#f87171" stroke-width="1.5"/>
+              <line x1="10" y1="10" x2="22" y2="10" stroke="#f87171" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="10" y1="14" x2="22" y2="14" stroke="#f87171" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="10" y1="18" x2="18" y2="18" stroke="#f87171" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Space Protocols</h3>
+          <p>Deep coverage of CCSDS standards for telecommand, telemetry, file transfer, and ranging across interplanetary links.</p>
+        </div>
+      </div>
+
+      <!-- ══════════ LIVE SATELLITE TRACKER ══════════ -->
+      <div class="tracker-section" id="tracker-section">
+        <div class="tracker-header">
+          <div class="tracker-header-left">
+            <div>
+              <div class="tracker-title">Live Satellite Tracker</div>
+              <div class="tracker-subtitle">Real-time ISS position · Updates every 10 s</div>
+            </div>
+            <div class="live-tag">
+              <span class="pulse-dot" style="width:6px;height:6px;"></span>
+              Live Feed
+            </div>
+          </div>
+        </div>
+
+        <div class="tracker-grid">
+
+          <!-- MAP -->
+          <div class="map-frame">
+            <div class="map-overlay-badge">
+              <span class="pulse-dot" style="width:6px;height:6px;"></span>
+              ISS · Live Position
+            </div>
+            <iframe
+              id="live-map"
+              title="Live ISS Map"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=-180,-85,180,85&layer=mapnik"
+              loading="lazy"
+              referrerpolicy="no-referrer">
+            </iframe>
+          </div>
+
+          <!-- DATA PANEL -->
+          <div class="sat-panel">
+
+            <!-- ISS card -->
+            <div class="sat-card">
+              <div class="sat-card-header">
+                <div class="sat-name">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="3" fill="#22d87a"/>
+                    <line x1="7" y1="1" x2="7" y2="4" stroke="#22d87a" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="7" y1="10" x2="7" y2="13" stroke="#22d87a" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="1" y1="7" x2="4" y2="7" stroke="#22d87a" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="10" y1="7" x2="13" y2="7" stroke="#22d87a" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  ISS (ZARYA)
+                </div>
+                <span class="sat-orbit-badge iss">LEO · 408 km</span>
+              </div>
+              <div class="sat-data-grid">
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Latitude</div>
+                  <div class="sat-data-val green" id="iss-lat">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Longitude</div>
+                  <div class="sat-data-val green" id="iss-lng">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Altitude</div>
+                  <div class="sat-data-val accent" id="iss-alt">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Velocity</div>
+                  <div class="sat-data-val accent" id="iss-vel">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Visibility</div>
+                  <div class="sat-data-val orange" id="iss-vis">—</div>
+                </div>
+              </div>
+              <div class="sat-signal-bar"><div class="sat-signal-fill" style="width:85%"></div></div>
+            </div>
+
+            <!-- Starlink simulated card -->
+            <div class="sat-card">
+              <div class="sat-card-header">
+                <div class="sat-name">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="3" fill="#3b82d4"/>
+                    <line x1="1" y1="7" x2="13" y2="7" stroke="#3b82d4" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  Starlink-1007
+                </div>
+                <span class="sat-orbit-badge leo">LEO · 550 km</span>
+              </div>
+              <div class="sat-data-grid">
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Latitude</div>
+                  <div class="sat-data-val" id="sl-lat">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Longitude</div>
+                  <div class="sat-data-val" id="sl-lng">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Altitude</div>
+                  <div class="sat-data-val accent" id="sl-alt">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Velocity</div>
+                  <div class="sat-data-val accent" id="sl-vel">—</div>
+                </div>
+              </div>
+              <div class="sat-signal-bar"><div class="sat-signal-fill" style="width:72%"></div></div>
+            </div>
+
+            <!-- GPS simulated card -->
+            <div class="sat-card">
+              <div class="sat-card-header">
+                <div class="sat-name">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <circle cx="7" cy="7" r="3" fill="#f59e0b"/>
+                    <circle cx="7" cy="7" r="6" stroke="#f59e0b" stroke-width="1" stroke-dasharray="2 2"/>
+                  </svg>
+                  GPS IIR-M SVN-47
+                </div>
+                <span class="sat-orbit-badge geo">MEO · 20,200 km</span>
+              </div>
+              <div class="sat-data-grid">
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Latitude</div>
+                  <div class="sat-data-val" id="gps-lat">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Longitude</div>
+                  <div class="sat-data-val" id="gps-lng">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Altitude</div>
+                  <div class="sat-data-val orange" id="gps-alt">—</div>
+                </div>
+                <div class="sat-data-item">
+                  <div class="sat-data-label">Velocity</div>
+                  <div class="sat-data-val orange" id="gps-vel">—</div>
+                </div>
+              </div>
+              <div class="sat-signal-bar"><div class="sat-signal-fill" style="width:95%"></div></div>
+            </div>
+
+            <!-- Upcoming ISS passes -->
+            <div class="passes-card">
+              <div class="passes-title">
+                Next ISS Passes (UTC)
+                <span style="float:right;font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:var(--accent2)">Dur · Max El</span>
+              </div>
+              <div id="passes-list">
+                <div class="pass-row"><span class="pass-time">Loading…</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Live data ticker -->
+        <div class="sat-ticker">
+          <span class="ticker-label">Live</span>
+          <span class="ticker-content" id="ticker-text">
+            ISS: Fetching position data… · ISS: Fetching position data… · ISS: Fetching position data…
+          </span>
+        </div>
+      </div>
+
+      <!-- ══════════ CHAT SECTION ══════════ -->
+      <div class="chat-section" id="chat-section">
+        <div class="chat-header">
+          <div class="chat-header-left">
+            <div>
+              <div class="chat-title">Live AI Assistant</div>
+              <div class="chat-subtitle">watsonx Orchestrate · Agent ID: 6e324b18</div>
+            </div>
+            <div class="live-tag">
+              <span class="pulse-dot" style="width:6px;height:6px;"></span>
+              Agent Online
+            </div>
+          </div>
+          <div class="chat-header-right">
+            <button class="icon-btn" id="btn-expand" title="Expand chat"></button>
+            <button class="icon-btn" id="btn-fullscreen" title="Fullscreen"></button>
+          </div>
+        </div>
+
+        <div id="chat-frame">
+          <!-- Loading overlay -->
+          <div id="chat-loader">
+            <div class="loader-orbit">
+              <div class="loader-ring"></div>
+              <div class="loader-ring loader-ring2"></div>
+              <div class="loader-core"></div>
+            </div>
+            <p class="loader-text">Connecting to <span>watsonx Orchestrate</span> agent…</p>
+          </div>
+          <!-- watsonx Orchestrate mounts into #root -->
+          <div id="root"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ SUGGESTED PROMPTS ══════════ -->
+      <div class="prompts-header">
+        <div class="section-label" style="margin-bottom:0">Suggested Questions — Click to Load</div>
+        <div style="font-size:11px;color:var(--muted);">Auto-injects into chat input</div>
+      </div>
+      <div class="prompts-grid">
+        <div class="prompt-card" data-q="What is the difference between LEO, MEO, and GEO satellite orbits, and when should each be used?">
+          <div class="prompt-tag">Orbital Mechanics</div>
+          <p>What is the difference between LEO, MEO, and GEO satellite orbits, and when should each be used?</p>
+        </div>
+        <div class="prompt-card" data-q="How do I calculate the free-space path loss for a Ku-band satellite link at 36,000 km altitude?">
+          <div class="prompt-tag">Link Budget</div>
+          <p>How do I calculate the free-space path loss for a Ku-band satellite link at 36,000 km altitude?</p>
+        </div>
+        <div class="prompt-card" data-q="Compare L, S, C, X, Ku, Ka, and V frequency bands for satellite communication use cases.">
+          <div class="prompt-tag">Frequency Bands</div>
+          <p>Compare L, S, C, X, Ku, Ka, and V frequency bands for satellite communication use cases.</p>
+        </div>
+        <div class="prompt-card" data-q="What antenna gain is needed for a ground station to achieve a 10 dB link margin on a LEO satellite?">
+          <div class="prompt-tag">Antenna Design</div>
+          <p>What antenna gain is needed for a ground station to achieve a 10 dB link margin on a LEO satellite?</p>
+        </div>
+        <div class="prompt-card" data-q="How does rain fade affect Ka-band satellite links, and what fade margin is typically recommended?">
+          <div class="prompt-tag">Signal Propagation</div>
+          <p>How does rain fade affect Ka-band satellite links, and what fade margin is typically recommended?</p>
+        </div>
+        <div class="prompt-card" data-q="Explain the CCSDS telecommand and telemetry standards used in modern satellite missions.">
+          <div class="prompt-tag">Space Protocols</div>
+          <p>Explain the CCSDS telecommand and telemetry standards used in modern satellite missions.</p>
+        </div>
+        <div class="prompt-card" data-q="What are the key design considerations for a phased-array antenna on a LEO communications satellite?">
+          <div class="prompt-tag">Phased Arrays</div>
+          <p>What are the key design considerations for a phased-array antenna on a LEO communications satellite?</p>
+        </div>
+        <div class="prompt-card" data-q="How do I compute the Doppler frequency shift for a 10 GHz signal from a satellite moving at 7.8 km/s?">
+          <div class="prompt-tag">Doppler Effect</div>
+          <p>How do I compute the Doppler frequency shift for a 10 GHz signal from a satellite moving at 7.8 km/s?</p>
+        </div>
+        <div class="prompt-card" data-q="What modulation and coding schemes are used in DVB-S2X for high-throughput satellite broadband?">
+          <div class="prompt-tag">Modulation</div>
+          <p>What modulation and coding schemes are used in DVB-S2X for high-throughput satellite broadband?</p>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /.layout -->
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer>
+    <div class="footer-brand">
+      Smart Satellite Communication Knowledge Assistant — Powered by <span>IBM watsonx Orchestrate</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.ibm.com/products/watsonx-orchestrate" target="_blank" rel="noopener">watsonx Orchestrate</a>
+      <a href="https://www.ibm.com" target="_blank" rel="noopener">IBM Cloud</a>
+    </div>
+  </footer>
+
+</div><!-- /#app -->
+
+<!-- Toast -->
+<div id="toast">
+  <span class="toast-icon">✦</span>
+  <span class="toast-msg"></span>
+</div>
+
+<!-- Scroll-to-top -->
+<button id="scroll-top" title="Back to top">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- watsonx Orchestrate configuration -->
+<script>
+  window.wxOConfiguration = {
+    orchestrationID: "e2fb55a7f9d040c3839a86e29d6d0186_0b89d8cf-06d8-4629-9a60-bc2b818b9ddb",
+    hostURL:         "https://au-syd.watson-orchestrate.cloud.ibm.com",
+    rootElementID:   "root",
+    deploymentPlatform: "ibmcloud",
+    crn: "crn:v1:bluemix:public:watsonx-orchestrate:au-syd:a/e2fb55a7f9d040c3839a86e29d6d0186:0b89d8cf-06d8-4629-9a60-bc2b818b9ddb::",
+    chatOptions: {
+      agentId: "6e324b18-cb30-428c-aab8-ac3ecc1db250"
+    }
+  };
+</script>
+
+<!-- Hero CTA scroll -->
+<script>
+  document.getElementById('btn-open-chat').addEventListener('click', function () {
+    document.getElementById('chat-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  document.getElementById('btn-learn-more').addEventListener('click', function () {
+    document.getElementById('capabilities').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
+
+<script src="app.js"></script>
+</body>
+</html>
